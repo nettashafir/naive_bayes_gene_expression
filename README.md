@@ -6,7 +6,7 @@ This project was submitted as final project for the department of Computer Scien
 We are model Gene Expression with the Naive Bayes model. Denoting the genes with $X_1,\ldots,X_N$, our assumption is that the genes are conditionaly independant given a hidden state of the cell, denoted by $C$.
 
 <div style="text-align: center;">
-  <img src="images/naive_bayes.png" width="700">
+  <img src="images/naive_bayes.png" width="500">
 </div>
 
 We are also assuming that the prior distribution is $C\sim\mathrm{categorical}(\theta_C)$, with $\theta_C\in\mathbb{R}^K$ for some $K\in\mathbb{N}$.

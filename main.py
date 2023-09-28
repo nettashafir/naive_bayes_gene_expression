@@ -222,7 +222,7 @@ def main_real_data(seed, cpd_code=CPD_CODE):
 
     # -------------------- save seed & model parameters
     if SAVE_RESULTS:
-        save_seed(seed=str(seed), M=M, N=N, K=K)
+        save_seed(seed=str(seed), num_samples=M, num_variables=N, num_states=K)
 
 
 def main_simulated_data(seed, cpd_code=CPD_CODE, r_max=100):
@@ -234,15 +234,12 @@ def main_simulated_data(seed, cpd_code=CPD_CODE, r_max=100):
     if cpd_code == CATEGORICAL_EM_CODE:
         real_theta_C, real_theta_X, data, states = generate_categorical_data(rng)
     else:
-        if DATA_PATH:
-            real_theta_C, real_r, real_p, seq_depth, data, states, theta_C_init, r_init, p_init = load_data(DATA_PATH)
-        else:
-            seq_depth = np.ones(M) if cpd_code < 2 else None
-            # (!) Negative Binomial converge to Normal distribution when r grows (!)
-            real_theta_C, real_r, real_p, seq_depth, data, states = \
-                generate_data_NegativeBinomial(rng=rng_generate_data,
-                                               seq_depth=seq_depth,
-                                               r_max=r_max)
+        seq_depth = np.ones(M) if cpd_code < 2 else None
+        # (!) Negative Binomial converge to Normal distribution when r grows (!)
+        real_theta_C, real_r, real_p, seq_depth, data, states = \
+            generate_data_NegativeBinomial(rng=rng_generate_data,
+                                           seq_depth=seq_depth,
+                                           r_max=r_max)
 
     # -------------------- run EM
     if cpd_code == CATEGORICAL_EM_CODE:
@@ -275,7 +272,7 @@ def main_simulated_data(seed, cpd_code=CPD_CODE, r_max=100):
 
     # -------------------- save data & init parameters
     if SAVE_RESULTS:
-        save_seed(seed=str(seed), M=M, N=N, K=K)
+        save_seed(seed=str(seed), num_samples=M, num_variables=N, num_states=K)
 
 
 if __name__ == "__main__":

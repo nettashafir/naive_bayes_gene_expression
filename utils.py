@@ -43,7 +43,6 @@ NEGATIVE_BINOMIAL_SEQ_DEPTH_EM_CODE = 2
 
 # main parameters
 REAL_DATA = False
-DATA_PATH = None
 CPD_CODE = NEGATIVE_BINOMIAL_SEQ_DEPTH_EM_CODE
 SAVE_RESULTS = False
 RANDOM_NOISE_INIT = True
@@ -63,9 +62,6 @@ DATA_LOCATION = "data/"   # FILL HERE IF RUNNING ON REAL DATA
 # ---------------------------- EM utils
 
 def calc_log_marginal_and_posterior(calc_logpmf_mat, data, theta_C, theta_X, **kwargs):
-    """
-      TODO: document, use shape_error
-    """
     M, N = data.shape
     K = theta_C.shape[0]
 
@@ -310,32 +306,13 @@ def load_data(path):
     return real_theta_C, real_r, real_p, seq_depth, data, states, theta_C_init, r_init, p_init
 
 
-def save_seed(seed: str, M: int, N: int, K: int):
+def save_seed(seed: str, num_samples: int, num_variables: int, num_states: int):
     file_name = datetime.now(pytz.timezone('Israel')).strftime("%d-%m-%Y_%H-%M-%S")
-    with open(f"data/{file_name}.txt", 'w') as f:
+    with open(f"{file_name}.txt", 'w') as f:
         f.write(seed)
-        f.write(f"M = {M}")
-        f.write(f"N = {N}")
-        f.write(f"K = {K}")
-
-
-def save_data(real_theta_C, real_r, real_p, data, states, seq_depth=None, theta_C_init=None, r_init=None, p_init=None, prefix=None):
-    if not prefix:
-        prefix = datetime.now(pytz.timezone('Israel')).strftime("%d-%m-%Y_%H-%M-%S")
-    os.mkdir(f"data/{prefix}")
-    np.save(f"data/{prefix}/data.npy", data)
-    np.save(f"data/{prefix}/states.npy", states)
-    np.save(f"data/{prefix}/real_theta_C.npy", real_theta_C)
-    np.save(f"data/{prefix}/real_r.npy", real_r)
-    np.save(f"data/{prefix}/real_p.npy", real_p)
-    if seq_depth is not None:
-        np.save(f"data/{prefix}/seq_depth.npy", seq_depth)
-    if theta_C_init is not None:
-        np.save(f"data/{prefix}/theta_C_init.npy", theta_C_init)
-    if r_init is not None:
-        np.save(f"data/{prefix}/r_init.npy", r_init)
-    if p_init is not None:
-        np.save(f"data/{prefix}/p_init.npy", p_init)
+        f.write(f"M = {num_samples}")
+        f.write(f"N = {num_variables}")
+        f.write(f"K = {num_states}")
 
 
 # ---------------------------- evaluation utils
@@ -352,8 +329,8 @@ def calc_S_count(data, states, num_states, _D):
 
 # ---------------------------- plots & visualization utils
 
-def plot_phi(phi_data, root=None, max_range=50, samples=100, y_lim=None):
-    right = (2 * root) if (root is not None and root > max_range) else max_range
+def plot_phi(phi_data, root_res=None, max_range=50, samples=100, y_lim=None):
+    right = (2 * root_res) if (root is not None and root_res > max_range) else max_range
     X = np.arange(0, right, step=(right / samples))
     phi_X = [phi_data(x) for x in X]
     plt.plot(X, phi_X)
@@ -362,9 +339,9 @@ def plot_phi(phi_data, root=None, max_range=50, samples=100, y_lim=None):
         plt.ylim(y_lim)
     plt.axvline(x=0, c="black")
     plt.axhline(y=0, c="black") 
-    if root:
-        plt.title(f"$phi$(root={root})={phi_data(root)}")
-        plt.axvline(x=root, c="red")
+    if root_res:
+        plt.title(f"$phi$(root={root_res})={phi_data(root_res)}")
+        plt.axvline(x=root_res, c="red")
     plt.show()
 
 
@@ -439,9 +416,9 @@ def bic_score(ll, k, n):
     return -2 * ll + k * np.log(n)
 
 
-def free_parameters_NB(k, N):
-    cpd_parameters = 2 * k * N
-    prior_parameters = k - 1
+def free_parameters_NB(num_states, num_variables):
+    cpd_parameters = 2 * num_states * num_variables
+    prior_parameters = num_states - 1
     return prior_parameters + cpd_parameters
 
 

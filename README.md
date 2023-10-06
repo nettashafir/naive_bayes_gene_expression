@@ -10,17 +10,19 @@ We are model Gene Expression with the Naive Bayes model. Denoting the genes with
 </div>
 
 We are also assuming that the prior distribution is $C\sim\mathrm{categorical}(\theta_C)$, with $\theta_C\in\mathbb{R}^K$ for some $K\in\mathbb{N}$.
-As for the local models $p(X_i|C=k)$, aka the CPDs, we implemented a few options, including the categorical distribution, and two variants of the Negative Binomial distribution, one of them taking into consideration the sequencing depth of the samples.
+As for the local models $p(X_i | C=k)$, aka the CPDs, we implemented a few options, including the categorical distribution, and two variants of the Negative Binomial distribution, one of them taking into consideration the sequencing depth of the samples.
+The parameters are learned with the Expectation-Maximization (EM) algorithm.
 
 A full description of the model and the results are discussed in detail in the `final_report.pdf`.
 
 ## Usage
-Run the file `main.py` for running the algorithm. The output parameters will be printed to the stdout.
+Run the file `main.py` for running the EM algorithm. The output parameters will be printed to the stdout.
 
 The file `plots.py` execute code that generate the plots of the results of our project - everything is in the `final_report.pdf`.
 
 In the head of file `utils.py` there is all the configurations for the EM algorithm. The most important are:
 - `CPD_CODE` (int) - Determine the distribution of the CPDs. Can take that values 0 for Categorical distribution, 1 for Negative Binomial distribution and 2 for Negative Binomial distribution that takes the sequencing depth of the samples into consideration.
-- `REAL_DATA` (bool) - if False, then `main.py` run on synthetic dataset. If True, run the algorithm on the real genomic data from the directory `data`.
+- `REAL_DATA` (bool) - if False, then `main.py` run on synthetic dataset. If True, run the algorithm on the real genomic data which are located in the directory `data` in this repo.
+- If running on synthetic data, then `N`, `K` and `M` are integers that determine the number of features (genes), the number of states and the number of samples, respectively. If using the Categorical CPDs, the variable `D` determine the size of the support of all the features, i.e. the largest value the gene expression can get.
 - `DATA_LOCATION` (str) - If running on real data, change this to the full path of the directory `data` in your station.
 

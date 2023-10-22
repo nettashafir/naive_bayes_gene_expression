@@ -3,7 +3,7 @@
 ## Description
 This project was submitted as final project for the department of Computer Science at the Hebrew University of Jerusalem, under the instruction of Mrs. Ela Falik and Prof. Nir Friedman from the CS department.
 
-We are model Gene Expression with the Naive Bayes model. Denoting the genes with $X_1,\ldots,X_N$, our assumption is that the genes are conditionaly independant given a hidden state of the cell, denoted by $C$.
+We model Gene Expression with the Naive Bayes model. Denoting the genes with $X_1,\ldots,X_N$, our assumption is that the genes are conditionaly independant given a hidden state of the cell, denoted by $C$.
 
 <div style="text-align: center;">
   <img src="images/naive_bayes.png" width="500">
